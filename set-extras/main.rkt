@@ -1,7 +1,7 @@
 #lang typed/racket/base
 
 ;; This module provides abbreviations and extra tools for dealing with sets
-(provide ℘ ∅ ∅eq ∪ ∩ ∋ ∈ ⊆
+(provide ℘ ∅ ∅eq mk-∅ mk-∅eq ∪ ∩ ∋ ∈ ⊆
          set-add*
          define-set
          set-partition set-partition-to-lists
