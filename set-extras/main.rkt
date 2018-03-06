@@ -7,7 +7,6 @@
          set-partition set-partition-to-lists
          for/union for*/union
          for/unioneq for*/unioneq
-         for/seteq: for*/seteq:
          set->predicate
          map/set
          set-add/compact
@@ -106,18 +105,6 @@
     [(_ : τ (for-clauses ...) body ...)
      (for*/fold ([acc : τ ∅eq]) (for-clauses ...)
        (∪ acc (let () body ...)))]))
-
-(define-syntax for/seteq:
-  (syntax-rules (:)
-    [(_ : τ (for-clauses ...) body ...)
-     (for/fold ([acc : τ ∅eq]) (for-clauses ...)
-       (set-add acc (let () body ...)))]))
-
-(define-syntax for*/seteq:
-  (syntax-rules (:)
-    [(_ : τ (for-clauses ...) body ...)
-     (for*/fold ([acc : τ ∅eq]) (for-clauses ...)
-       (set-add acc (let () body ...)))]))
 
 (: set->predicate (∀ (X) (℘ X) → (X → Boolean)))
 ;; Convert set to predicate
