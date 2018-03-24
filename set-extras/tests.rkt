@@ -24,3 +24,9 @@
 (check-equal? (for/union : (℘ Integer) ([n '(1 2 3 4)])
                 {set n (* 2 n)})
               {set 1 2 3 4 2 4 6 8})
+
+(check-true (set-ormap integer? (set 1 2 3 'b 'c)))
+(check-false (set-ormap string? (set 1 2 3 'b 'c)))
+(check-true (set-andmap integer? (set 1 2 3 4 5)))
+(check-false (set-andmap integer? (set 1 2 3 'b)))
+(check-equal? (set-filter integer? (set 1 2 3 'b 'c)) (set 1 2 3))

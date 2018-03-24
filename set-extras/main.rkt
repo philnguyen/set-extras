@@ -136,3 +136,33 @@
   (define same (∩ xs ys))
   (values same (set-subtract xs same) (set-subtract ys same)))
 
+
+;; Using these can be less verbose than for/or in TR with annotations sometimes
+
+(module cheat racket/base
+  (require racket/set)
+  (provide (all-defined-out))
+  (define ∅eq (seteq))
+  (define ∅ (set))
+  (define (set-filter p? xs)
+    (for/fold ([acc (if (set-eq? xs) ∅eq ∅)])
+              ([x (in-set xs)] #:when (p? x))
+      (set-add acc x))))
+
+(require typed/racket/unsafe)
+(unsafe-require/typed/provide
+ 'cheat
+ [set-filter (∀ (a b) (case->
+                       [(a → Any : #:+ b) (Setof a) → (Setof b)]
+                       [(a → Any) (Setof a) → (Setof a)]))])
+(provide set-andmap set-ormap)
+
+(: set-ormap (∀ (a b) (a → b) (Setof a) → (Option b)))
+(define (set-ormap p xs)
+  (for/or ([x (in-set xs)])
+    (p x)))
+
+(: set-andmap (∀ (a b) (a → b) (Setof a) → (U Boolean b)))
+(define (set-andmap p xs) ; can't use `for/and`
+  (for/fold ([res : (U Boolean b) #t]) ([x (in-set xs)])
+    (and res (p x))))
