@@ -142,12 +142,9 @@
 (module cheat racket/base
   (require racket/set)
   (provide (all-defined-out))
-  (define ∅eq (seteq))
-  (define ∅ (set))
   (define (set-filter p? xs)
-    (for/fold ([acc (if (set-eq? xs) ∅eq ∅)])
-              ([x (in-set xs)] #:when (p? x))
-      (set-add acc x))))
+    (for/fold ([acc xs]) ([x (in-set xs)] #:unless (p? x))
+      (set-remove acc x))))
 
 (require typed/racket/unsafe)
 (unsafe-require/typed/provide
