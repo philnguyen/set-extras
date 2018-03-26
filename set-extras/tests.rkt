@@ -30,3 +30,7 @@
 (check-true (set-andmap integer? (set 1 2 3 4 5)))
 (check-false (set-andmap integer? (set 1 2 3 'b)))
 (check-equal? (set-filter integer? (set 1 2 3 'b 'c)) (set 1 2 3))
+
+(check-equal? (set-union-map (λ ([x : Integer]) {set (+ 1 x) (+ 2 x)})
+                             {set 1 2 3})
+              {set 2 3 4 5})

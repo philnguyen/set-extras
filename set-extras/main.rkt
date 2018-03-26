@@ -152,7 +152,7 @@
  [set-filter (∀ (a b) (case->
                        [(a → Any : #:+ b) (Setof a) → (Setof b)]
                        [(a → Any) (Setof a) → (Setof a)]))])
-(provide set-andmap set-ormap)
+(provide set-andmap set-ormap set-union-map)
 
 (: set-ormap (∀ (a b) (a → b) (Setof a) → (Option b)))
 (define (set-ormap p xs)
@@ -163,3 +163,8 @@
 (define (set-andmap p xs) ; can't use `for/and`
   (for/fold ([res : (U Boolean b) #t]) ([x (in-set xs)])
     (and res (p x))))
+
+(: set-union-map (∀ (a b) ([(a → (Setof b)) (Setof a)] [(Setof b)] . ->* . (Setof b))))
+(define (set-union-map f xs [mt ∅])
+  (for/fold ([acc : (Setof b) mt]) ([x (in-set xs)])
+    (∪ acc (f x))))
