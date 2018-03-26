@@ -166,5 +166,8 @@
 
 (: set-union-map (∀ (a b) ([(a → (Setof b)) (Setof a)] [(Setof b)] . ->* . (Setof b))))
 (define (set-union-map f xs [mt ∅])
-  (for/fold ([acc : (Setof b) mt]) ([x (in-set xs)])
-    (∪ acc (f x))))
+  (if (set-empty? xs)
+      mt
+      (for/fold ([acc : (Setof b) (f (set-first xs))])
+                ([x (in-set (set-rest xs))])
+        (∪ acc (f x)))))
