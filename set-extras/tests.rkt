@@ -34,3 +34,6 @@
 (check-equal? (set-union-map (λ ([x : Integer]) {set (+ 1 x) (+ 2 x)})
                              {set 1 2 3})
               {set 2 3 4 5})
+
+(check-equal? (set-fold + 0 (set 1 2 3)) 6)
+(check-equal? ((inst set-fold (℘ Integer) (℘ Integer)) set-union ∅ (set (set 1 2 3) (set 3 4 5) (set 4 5 6))) (set 1 2 3 4 5 6))
