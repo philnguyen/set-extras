@@ -69,10 +69,10 @@
 ;; Partition set members into those that satisfy the predicate and the rest
 (define (set-partition p xs)
   (define s∅ (if (set-eq? xs) ∅eq ∅))
-  (for/fold ([pass : (℘ X) s∅] [fail : (℘ X) s∅])
-            ([x (in-set xs)])
-    (cond [(p x) (values (set-add pass x) fail)]
-          [else (values pass (set-add fail x))])))
+  ;; If all of `xs` already pass `p`, no new allocation
+  (for/fold ([pass : (℘ X) xs] [fail : (℘ X) s∅]) ([x (in-set xs)])
+    (cond [(p x) (values pass fail)]
+          [else (values (set-remove pass x) (set-add fail x))])))
 
 (: set-partition-to-lists (∀ (X) ((X → Boolean) (℘ X) → (Values (Listof X) (Listof X)))))
 ;; Partition set members into those that satisfy the predicate and the rest
