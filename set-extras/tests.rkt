@@ -37,3 +37,12 @@
 
 (check-equal? (set-fold + 0 (set 1 2 3)) 6)
 (check-equal? ((inst set-fold (℘ Integer) (℘ Integer)) set-union ∅ (set (set 1 2 3) (set 3 4 5) (set 4 5 6))) (set 1 2 3 4 5 6))
+
+(let ()
+  (define-set xs : Integer #:mutable? #t)
+  (xs-add! 0)
+  (check-true (xs-has? 0))
+  (xs-union! {set 0 1})
+  (check-true (xs-has? 1))
+  (xs-remove! 0)
+  (check-false (xs-has? 0)))
