@@ -46,3 +46,12 @@
   (check-true (xs-has? 1))
   (xs-remove! 0)
   (check-false (xs-has? 0)))
+
+(let ()
+  (define-set xs : Integer #:as-mutable-hash? #t)
+  (xs-add! 0)
+  (check-true (xs-has? 0))
+  (xs-union! {set 0 1})
+  (check-true (xs-has? 1))
+  (xs-remove! 0)
+  (check-false (xs-has? 0)))

@@ -9,6 +9,7 @@
          for/unioneq for*/unioneq
          set->predicate
          map/set
+         set-add/compact
          set-intersect/differences)
 
 (require (for-syntax racket/base
@@ -51,7 +52,7 @@
   (syntax-parser
     [(_ s:id (~literal :) τ
         (~optional (~seq #:eq? use-eq?) #:defaults ([(use-eq? 0) #'#f]))
-        (~optional (~seq #:mutable? mut?:boolean) #:defaults ([(mut? 0) #'#f])))
+        (~optional (~seq (~or #:mutable? #:as-mutable-hash?) mut?:boolean) #:defaults ([(mut? 0) #'#f])))
      (with-syntax ([s-has? (format-id #'s "~a-has?" #'s)]
                    [s-add! (format-id #'s "~a-add!" #'s)]
                    [s-add*! (format-id #'s "~a-add*!" #'s)]
@@ -128,6 +129,21 @@
 ;; Like `map`, but for set
 (define (map/set f xs)
   (for/set: : (℘ Y) ([x : X (in-set xs)]) (f x)))
+
+(: set-add/compact (∀ (X) X (X X → (Option X)) → (℘ X) → (℘ X)))
+(define ((set-add/compact x ?join) xs)
+  (define-set subsumed-olds : X)
+  (define x* : X x)
+  (define do-nothing? : Boolean #f)
+  (for ([xᵢ (in-set xs)] #:break do-nothing?)
+    (define ?x* (?join x xᵢ))
+    (when ?x*
+      (cond [(eq? ?x* xᵢ) (set! do-nothing? #t)]
+            [(eq? ?x* x ) (subsumed-olds-add! xᵢ)]
+            [else (subsumed-olds-add! xᵢ)
+                  (set! x* ?x*)])))
+  (cond [do-nothing? xs]
+        [else (set-add (set-subtract xs subsumed-olds) x*)]))
 
 (: set-intersect/differences (∀ (X) (℘ X) (℘ X) → (Values (℘ X) (℘ X) (℘ X))))
 ;; Partition elements in 2 sets into 3: the intersection, and those unique to each
