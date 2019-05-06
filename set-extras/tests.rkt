@@ -55,3 +55,6 @@
   (check-true (xs-has? 1))
   (xs-remove! 0)
   (check-false (xs-has? 0)))
+
+(check-equal? (set-count-by even? (set 1 2 3 4 5)) 2)
+(check-equal? (set-count-by odd? ∅) 0)

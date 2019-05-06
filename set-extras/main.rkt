@@ -10,7 +10,8 @@
          set->predicate
          map/set
          set-add/compact
-         set-intersect/differences)
+         set-intersect/differences
+         set-count-by)
 
 (require (for-syntax racket/base
                      racket/syntax
@@ -191,3 +192,7 @@
 (define (set-fold f y xs)
   (for/fold ([y : b y]) ([x (in-set xs)])
     (f x y)))
+
+(: set-count-by (∀ (X) (X → Any) (℘ X) → Natural))
+(define (set-count-by p? xs)
+  (for/sum : Natural ([x (in-set xs)] #:when (p? x)) 1))
