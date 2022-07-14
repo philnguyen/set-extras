@@ -31,7 +31,7 @@
   [in-mutable-set (∀ (α) (Setof α) → (Sequenceof α))]
   [in-immutable-set (∀ (α) (Setof α) → (Sequenceof α))])
 
-(define-type ℘ Setof)
+(define-type (℘ A) (Setof A))
 (define ∅ : (℘ Nothing) (set))
 (define ∅eq : (℘ Nothing) (seteq))
 (define ∪ set-union)
